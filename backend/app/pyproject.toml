@@ -1,7 +1,7 @@
 [project]
-name = "url-shortener"
+name = "app"
 version = "0.1.0"
-description = "backend of url shortener"
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = []

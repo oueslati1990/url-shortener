@@ -1,6 +1,9 @@
-def main():
-    print("Hello from app!")
+import logging
+from fastapi import FastAPI
+
+app = FastAPI(title="Url Shoretener")
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/health")
+async def health() -> dict[str, str]:
+    return {"status": "ok"}

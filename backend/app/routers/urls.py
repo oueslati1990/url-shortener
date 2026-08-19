@@ -9,10 +9,13 @@ router = APIRouter(prefix="/api/urls", tags=["urls"])
 
 @router.post("/", response_model=URLResponse, status_code=201)
 def shorten_url(payload: URLCreate):
-    code = store.generate_code(settings.short_code_length)
-    result = store.save(code, payload.original_url)
-    if not result:
-        raise HTTPException(
-            status_code=400, detail="An issue happened when creating the short url"
-        )
-    return URLResponse(**result, short_url=f"{settings.base_url}/{code}")
+    try:
+        code = store.generate_code(settings.short_code_length)
+        store.save(code, payload.original_url)
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return URLResponse(
+        short_code=code,
+        short_url=f"{settings.base_url}/{code}",
+        original_url=payload.original_url,
+    )

@@ -14,6 +14,5 @@ def generate_code(length: int = 7) -> str:
     raise RuntimeError("Could not generate a unique code , try on longer length")
 
 
-def save(code: str, original_url: str) -> dict:
+def save(code: str, original_url: str) -> None:
     _db[code] = original_url
-    return {"short_code": code, "original_url": original_url}

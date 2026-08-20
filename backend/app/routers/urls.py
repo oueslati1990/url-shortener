@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import RedirectResponse
 
 from app.shemas import URLResponse, URLCreate
 from app import store
@@ -29,7 +30,20 @@ def list_all():
         URLResponse(
             short_code=e["short_code"],
             original_url=e["original_url"],
-            short_url=f"{settings.base_url}/{e["short_code"]}",
+            short_url=f"{settings.base_url}/{e['short_code']}",
         )
         for e in all_entries
     ]
+
+
+redirect_router = APIRouter(tags=["redirect"])
+
+
+@redirect_router.get("/{code}")
+def redirect_to_original(code: str):
+    original = store.find(code)
+    if not original:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="url not found !"
+        )
+    return RedirectResponse(original, status_code=status.HTTP_302_FOUND)

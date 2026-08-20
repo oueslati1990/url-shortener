@@ -18,5 +18,11 @@ def save(code: str, original_url: str) -> None:
     _db[code] = original_url
 
 
-def list_all_entries() -> dict[str, str]:
-    return _db
+def list_all_entries() -> list[dict]:
+    return [
+        {"short_code": code, "original_url": original} for code, original in _db.items()
+    ]
+
+
+def find(code: str) -> str | None:
+    return _db.get(code)

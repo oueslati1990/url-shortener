@@ -16,3 +16,7 @@ def generate_code(length: int = 7) -> str:
 
 def save(code: str, original_url: str) -> None:
     _db[code] = original_url
+
+
+def list_all_entries() -> dict[str, str]:
+    return _db

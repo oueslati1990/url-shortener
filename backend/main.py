@@ -1,6 +1,7 @@
-def main():
-    print("Hello from backend!")
+from fastapi import FastAPI
+from app.routers.urls import router, redirect_router
 
+app = FastAPI(title="Url Shortener app")
 
-if __name__ == "__main__":
-    main()
+app.include_router(router)
+app.include_router(redirect_router)

@@ -1,26 +1,23 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import RedirectResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.shemas import URLResponse, URLCreate
-from app import store
+from app import crud
+from database import get_db
 from app.config import settings
 
 router = APIRouter(prefix="/api/urls", tags=["urls"])
 
 
 @router.post("/", response_model=URLResponse, status_code=status.HTTP_201_CREATED)
-def shorten_url(payload: URLCreate):
+async def shorten_url(payload: URLCreate, db: AsyncSession = Depends(get_db)):
     original_url = str(payload.original_url)
     try:
-        code = store.generate_code(settings.short_code_length)
-        store.save(code, original_url)
+        url = await crud.create_url(db=db, original_url=original_url)
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
-    return URLResponse(
-        short_code=code,
-        short_url=f"{settings.base_url}/{code}",
-        original_url=original_url,
-    )
+    return {**url.__dict__, "short_url": f"{settings.base_url}/{url.short_code}"}
 
 
 @router.get("/", response_model=list[URLResponse])

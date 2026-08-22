@@ -11,5 +11,7 @@ class URLResponse(BaseModel):
     short_code: str
     short_url: str
     original_url: str
-    clicks: int
+    click_count: int
     created_at: datetime
+
+    model_config = {"from_attributes": True}

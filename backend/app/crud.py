@@ -16,9 +16,9 @@ def _generate_code(length: int) -> str:
 async def create_url(db: AsyncSession, original_url: str) -> URL:
     for _ in range(5):
         code = _generate_code(settings.short_code_length)
-        existing = db.scalar(select(URL).where(URL.short_code == code))
+        existing = await db.scalar(select(URL).where(URL.short_code == code))
         if not existing:
-            url = URL(original_url=original_url, short_code=short_code)
+            url = URL(original_url=original_url, short_code=code)
             db.add(url)
             await db.commit()
             await db.refresh(url)
@@ -30,9 +30,9 @@ async def get_by_code(db: AsyncSession, code: str) -> URL | None:
     return await db.scalar(select(URL).where(URL.short_code == code))
 
 
-async def list_al_entries(db: AsyncSession, limit: int = 50) -> list[URL]:
+async def list_urls(db: AsyncSession, limit: int = 50) -> list[URL]:
     result = await db.execute(
-        select(URL).order_by(URL.created_at.desc).limit(limit=limit)
+        select(URL).order_by(URL.created_at.desc()).limit(limit=limit)
     )
     return list(result.scalars().all())
 

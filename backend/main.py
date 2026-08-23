@@ -10,7 +10,7 @@ from app.database import Base, engine
 async def lifespan(app: FastAPI):
     # STARTUP: runs before the first request
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all())
+        await conn.run_sync(Base.metadata.create_all)
 
     yield  # <-- app is alive and serving requests here
 

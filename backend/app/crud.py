@@ -2,9 +2,8 @@ import string
 import random
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from database import get_db
-from models import URL
-from config import settings
+from app.models import URL
+from app.config import settings
 
 ALPHABET = string.ascii_letters + string.digits
 

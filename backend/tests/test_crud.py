@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch
 from app import crud
 
 
@@ -55,3 +56,12 @@ async def test_list_urls_returns_newest_first(db):
     # most recently created comes first
     assert urls[0].id == url2.id
     assert urls[1].id == url1.id
+
+
+async def test_create_url_raises_after_exhausting_retries(db):
+    # Force _generate_code to always return the same value.
+    # First call succeeds; the rest of calls fail and exhaust the 5-attempt limit.
+    with patch("app.crud._generate_code", return_value="AAAAAAA"):
+        await crud.create_url(db, "https://first.com")  # short_code = AAAAAAA
+        with pytest.raises(RuntimeError, match="unique"):
+            await crud.create_url(db, "https://second.com")

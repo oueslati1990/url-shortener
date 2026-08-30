@@ -43,3 +43,24 @@ async def test_list_urls_contains_created_entry(client):
     data = response.json()
     assert len(data) == 1
     assert response.status_code == 200
+
+
+async def test_redirect_returns_302(client):
+    post = await client.post("/api/urls/", json={"original_url": "http://example.com"})
+    code = post.json()["short_code"]
+    # Add follow_redirects = False, or else it will call immediately GET http://example.com
+    # and return the final 200 response
+    response = await client.get(f"/{code}", follow_redirects=False)
+    assert response.status_code == 302
+
+
+async def test_redirect_location_points_to_original(client):
+    post = await client.post("/api/urls/", json={"original_url": "http://example.com"})
+    code = post.json()["short_code"]
+    response = await client.get(f"/{code}", follow_redirects=False)
+    assert "http://example.com" in response.headers["location"]
+
+
+async def test_redirect_unknown_code_returns_404(client):
+    response = await client.get("/xxxxxxx", follow_redirects=False)
+    assert response.status_code == 404

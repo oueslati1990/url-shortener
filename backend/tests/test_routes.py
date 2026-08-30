@@ -13,7 +13,7 @@ async def test_shorten_url_response_has_expected_fields(client):
     assert "id" in data
     assert "short_code" in data
     assert "short_url" in data
-    assert data["original_url"] == "http://example.com"
+    assert data["original_url"] == "http://example.com/"
     assert data["click_count"] == 0
 
 

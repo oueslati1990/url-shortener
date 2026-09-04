@@ -1,0 +1,29 @@
+<section class="card">
+    <h2>Shorten a URL</h2>
+
+    <form (ngSubmit)="submit()">
+        <div class="row">
+            <input [formControl]="urlControl" type="url" placeholder="https://example.com/very/long/url"
+                class="url-input" />
+            <button type="submit" class="btn-primary" [disabled]="urlControl.invalid || isLoading()">
+                {{ isLoading() ? 'Shortening…' : 'Shorten' }}
+            </button>
+        </div>
+
+        @if (urlControl.dirty && urlControl.errors?.['pattern']) {
+        <p class="error">Enter a valid URL starting with http:// or https://</p>
+        }
+        @if (error()) {
+        <p class="error">{{ error() }}</p>
+        }
+    </form>
+
+    @if (lastCreated()) {
+    <div class="result">
+        ✓ Short URL:
+        <a [href]="lastCreated()!.short_url" target="_blank">
+            {{ lastCreated()!.short_url }}
+        </a>
+    </div>
+    }
+</section>

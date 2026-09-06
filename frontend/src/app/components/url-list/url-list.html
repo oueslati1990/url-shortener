@@ -1,0 +1,26 @@
+@if (isLoading()) {
+<p>Loading…</p>
+} @else if (urls().length === 0) {
+<p>No URLs shortened yet. Use the form above!</p>
+} @else {
+<table>
+    <thead>
+        <tr>
+            <th>Short URL</th>
+            <th>Original</th>
+            <th>Clicks</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (url of urls(); track url.id) {
+        <tr>
+            <td><a [href]="url.short_url" target="_blank">{{ url.short_code }}</a></td>
+            <td class="original">{{ url.original_url }}</td>
+            <td>{{ url.click_count }}</td>
+            <td>{{ url.created_at | date:'short' }}</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { UrlService } from '../../services/url.service';
 import { UrlItem } from '../../models/url.model';
 
 @Component({
   selector: 'app-url-list',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './url-list.html',
   styleUrl: './url-list.scss',
 })

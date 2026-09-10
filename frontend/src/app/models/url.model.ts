@@ -3,7 +3,8 @@ export interface UrlItem {
     short_code: string,
     original_url: string,
     created_at: string,
-    short_url: string
+    short_url: string,
+    click_count: number
 }
 
 

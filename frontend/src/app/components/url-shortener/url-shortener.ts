@@ -1,11 +1,11 @@
 import { Component, inject, output, signal } from '@angular/core';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { UrlService } from '../../services/url.service';
-import { FormControl, Validators } from '@angular/forms';
 import { UrlItem } from '../../models/url.model';
 
 @Component({
   selector: 'app-url-shortener',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './url-shortener.html',
   styleUrl: './url-shortener.scss',
 })

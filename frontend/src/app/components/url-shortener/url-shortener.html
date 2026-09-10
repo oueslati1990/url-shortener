@@ -1,11 +1,11 @@
 <section class="card">
     <h2>Shorten a URL</h2>
 
-    <form (ngSubmit)="submit()">
+    <form [formGroup]="urlForm" (ngSubmit)="submit()">
         <div class="row">
-            <input [formControl]="urlControl" type="url" placeholder="https://example.com/very/long/url"
-                class="url-input" />
-            <button type="submit" class="btn-primary" [disabled]="urlControl.invalid || isLoading()">
+            <input formControlName="url" id="url-input" type="url"
+                placeholder="https://example.com/very/long/url" class="url-input" />
+            <button type="submit" class="btn-primary" [disabled]="urlForm.invalid || isLoading()">
                 {{ isLoading() ? 'Shortening…' : 'Shorten' }}
             </button>
         </div>

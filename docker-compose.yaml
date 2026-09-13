@@ -37,5 +37,17 @@ services:
       - "4200:80"
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      - backend
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
 volumes:
+  prometheus_data:
   postgres_data:
